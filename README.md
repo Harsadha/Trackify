@@ -155,7 +155,7 @@ Client (React SPA) <--> REST API (Express) <--> MySQL (Sequelize)
 
 ---
 
-### **Step-by-step Flow:**
+## **Step-by-step Flow:**
 
 1. User interacts with React SPA
 2. React components dispatch HTTP requests (Axios/fetch)
