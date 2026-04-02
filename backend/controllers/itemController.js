@@ -1,85 +1,175 @@
+//controllers>itemController.js
+
 const Item = require("../models/Item");
+const { User } = require("../models");
+const { Op } = require("sequelize");
 
-// CREATE ITEM (WITH IMAGE)
-exports.createItem = async (req, res) => {
-  try {
-    // 🔍 DEBUG (very important)
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
-    console.log("USER:", req.user);
+// CREATE ITEM
+exports.createItem = async (req, res) =>
+{
+  try
+  {
+    const { title, description, category, location, type } = req.body;
 
-    // ❌ If no body
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({ msg: "No data received in body" });
-    }
-
-    // ❌ If user not present
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ msg: "User not authenticated" });
-    }
+    if (!title || !category || !type)
+      return res.status(400).json({ msg: "Missing required fields" });
 
     const item = await Item.create({
-      title: req.body.title,
-      description: req.body.description,
-      category: req.body.category,
-      location: req.body.location,
-      type: req.body.type,
+      title,
+      description,
+      category,
+      location,
+      type,
       image: req.file ? req.file.path : null,
       UserId: req.user.id
     });
 
     res.status(201).json(item);
 
-  } catch (err) {
-    console.error("CREATE ITEM ERROR:", err);
+  }
+  catch (err)
+  {
     res.status(500).json({ error: err.message });
   }
 };
 
-// GET ALL ITEMS
-exports.getItems = async (req, res) => {
-  try {
-    const items = await Item.findAll();
+// GET ALL ITEMS (WITH FILTERS + USER)
+exports.getItems = async (req, res) =>
+{
+  try
+  {
+    const { search, type, category, status } = req.query;
+
+    let where = {};
+
+    if (type) where.type = type;
+    if (category) where.category = category;
+    if (status) where.status = status;
+
+    if (search)
+    {
+      where[Op.or] = [
+        { title: { [Op.like]: `%${search}%` } },
+        { description: { [Op.like]: `%${search}%` } },
+        { location: { [Op.like]: `%${search}%` } }
+      ];
+    }
+
+    const items = await Item.findAll({
+      where,
+      include: [{ model: User, attributes: ["name"] }]
+    });
+
     res.json(items);
-  } catch (err) {
-    console.error(err);
+
+  }
+  catch (err)
+  {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// GET ITEM BY ID
+exports.getItemById = async (req, res) =>
+{
+  try
+  {
+    const item = await Item.findByPk(req.params.id, {
+      include: [{ model: User, attributes: ["name"] }]
+    });
+
+    if (!item)
+      return res.status(404).json({ msg: "Item not found" });
+
+    res.json(item);
+
+  }
+  catch (err)
+  {
     res.status(500).json({ error: err.message });
   }
 };
 
 // GET MY ITEMS
-exports.getMyItems = async (req, res) => {
-  try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ msg: "User not authenticated" });
-    }
-
+exports.getMyItems = async (req, res) =>
+{
+  try
+  {
     const items = await Item.findAll({
       where: { UserId: req.user.id }
     });
 
     res.json(items);
-  } catch (err) {
-    console.error(err);
+
+  }
+  catch (err)
+  {
     res.status(500).json({ error: err.message });
   }
 };
 
 // UPDATE STATUS
-exports.updateStatus = async (req, res) => {
-  try {
+exports.updateStatus = async (req, res) =>
+{
+  try
+  {
     const item = await Item.findByPk(req.params.id);
 
-    if (!item) {
+    if (!item)
       return res.status(404).json({ msg: "Item not found" });
-    }
+
+    if (item.UserId !== req.user.id)
+      return res.status(403).json({ msg: "Not allowed" });
 
     item.status = req.body.status;
     await item.save();
 
     res.json(item);
+
+  }
+  catch (err)
+  {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// DELETE ITEM
+exports.deleteItem = async (req, res) =>
+{
+  try
+  {
+    const item = await Item.findByPk(req.params.id);
+
+    if (!item)
+      return res.status(404).json({ msg: "Item not found" });
+
+    if (item.UserId !== req.user.id)
+      return res.status(403).json({ msg: "Not allowed" });
+
+    await item.destroy();
+
+    res.json({ msg: "Item deleted" });
+
+  }
+  catch (err)
+  {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.getItemById = async (req, res) => {
+  try {
+    const item = await Item.findByPk(req.params.id, {
+      include: { model: User, attributes: ["id", "name"] }
+    });
+
+    if (!item) {
+      return res.status(404).json({ msg: "Item not found" });
+    }
+
+    res.json(item);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
