@@ -14,10 +14,9 @@ and Sequelize ORM.
 - [API Endpoints](#api-endpoints)  
 - [Authentication & Security](#authentication--security)  
 - [Installation & Setup](#installation--setup)  
-- [Project Architecture & Data Flow](#project-architecture--data-flow)  
-- [Future Roadmap](#future-roadmap)  
-- [Learning Outcomes](#learning-outcomes)  
-- [License](#license)
+- [Project Architecture & Data Flow](#project-architecture--data-flow)
+- [Step-by-step Flow](#step-by-step-Flow)
+
 
 ---
 
@@ -153,6 +152,8 @@ npm run dev
 Three-tier Architecture (MVC-like):
 
 Client (React SPA) <--> REST API (Express) <--> MySQL (Sequelize)
+
+---
 
 ### **Step-by-step Flow:**
 
