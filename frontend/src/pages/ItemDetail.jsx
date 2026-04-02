@@ -101,7 +101,7 @@ export default function ItemDetail() {
             </div>
             <div className="detail-field">
               <span className="detail-field-label">Reported On</span>
-              <span className="detail-field-value">📅 {date}</span>
+              <span className="detail-field-value"> {date}</span>
             </div>
           </div>
 
@@ -126,7 +126,7 @@ export default function ItemDetail() {
           ) : (
             <p style={{ color: "var(--muted)", fontSize: "0.85rem" }}>
               {item.status === "open"
-                ? "If this is yours, contact the poster above."
+                ? "If this is yours, please claim it from the person posted."
                 : "This item has been marked as resolved."}
             </p>
           )}

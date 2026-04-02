@@ -44,7 +44,7 @@ export default function ItemCard({ item }) {
       </div>
 
       <div className="item-card-footer">
-        <span>📅 {date}</span>
+        <span> {date}</span>
         <span>👤 {item.User?.name || "—"}</span>
       </div>
     </Link>

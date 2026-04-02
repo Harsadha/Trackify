@@ -44,16 +44,10 @@ export default function Dashboard() {
 
   return (
     <div>
-      {/* Hero */}
-      <div className="dash-hero">
-        <h1>Find what's <em>lost,</em><br />return what's found.</h1>
-        <p>Browse all reported items on campus. Use the filters to narrow down your search.</p>
-      </div>
-
       {/* Filters */}
       <div className="filters-bar">
         <input
-          type="text" placeholder="🔍  Search title, description, location…"
+          type="text" placeholder="Search title, description, location…"
           value={search} onChange={(e) => setSearch(e.target.value)}
         />
         <select value={type} onChange={(e) => setType(e.target.value)}>

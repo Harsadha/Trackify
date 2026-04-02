@@ -7,8 +7,8 @@
   --surface:    #181818;
   --surface2:   #222222;
   --border:     #2e2e2e;
-  --accent:     #e8a838;
-  --accent-dim: #c48a20;
+  --accent:     #2f7bc8;    /* bright pink-purple */
+  --accent-dim: #142ad2;    /* darker shade of pink-purple for hover */
   --danger:     #e05252;
   --success:    #4caf82;
   --text:       #f0ece4;
