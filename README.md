@@ -79,16 +79,26 @@ and Sequelize ORM.
 ---
 
 ## **API Endpoints**
+Base URL: `http://localhost:5000/api`
 
-All responses follow:
+### **Auth Routes**
 
-```json
-{
-  "success": true,
-  "data": {},
-  "message": "Optional descriptive message"
-}
-```
+| Method | Endpoint             | Description            |
+|--------|---------------------|------------------------|
+| POST   | /api/auth/register  | Register new user      |
+| POST   | /api/auth/login     | Login user             |
+
+### **Item Routes**
+
+| Method | Endpoint                | Auth | Description                |
+|--------|------------------------|------|----------------------------|
+| GET    | /api/items             | No   | Get all items              |
+| POST   | /api/items             | Yes  | Create new item            |
+| GET    | /api/items/:id         | No   | Get item by ID             |
+| PUT    | /api/items/:id         | Yes  | Update item (owner only)   |
+| DELETE | /api/items/:id         | Yes  | Delete item (owner only)   |
+| GET    | /api/items/user/me     | Yes  | Get user's items           |
+
 
 ---
 
